@@ -2,10 +2,8 @@ provider "aws" {
   region = "us-east-2"
 }
 
-variable "server_port" {
-  description = "The port the server will use for HTTP requests"
-  type        = number
-  default     = 8080
+data "aws_vpc" "default" {
+  default = true
 }
 
 data "aws_subnets" "default" {
@@ -15,10 +13,16 @@ data "aws_subnets" "default" {
   }
 }
 
+variable "server_port" {
+  description = "The port the server will use for HTTP requests"
+  type        = number
+  default     = 8080
+}
+
 resource "aws_launch_configuration" "example" {
-  ami                    = "ami-0fb653ca2d3203ac1"
+  image_id               = "ami-0fb653ca2d3203ac1"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.instance.id]
+  security_groups = [aws_security_group.instance.id]
 
   user_data = <<-EOF
               #!/bin/bash
@@ -99,9 +103,4 @@ resource "aws_security_group" "alb" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-output "public_ip" {
-  value       = aws_instance.example.public_ip
-  description = "The public IP address of the web server"
 }
