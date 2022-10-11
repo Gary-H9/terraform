@@ -2,6 +2,8 @@
 *.tfstate
 *.tfstate.backup
 .infracost
+remote/.terraform.lock.hcl
+remote/.terraform/*
 remote/ch2/.infracost
 remote/ch2/terraform.tfstate
 remote/ch2/terraform.tfstate.backup
