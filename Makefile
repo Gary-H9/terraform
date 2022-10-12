@@ -12,3 +12,5 @@ apply:
 
 destroy: 
 	terraform destroy
+
+.PHONY: init plan validate apply destroy
