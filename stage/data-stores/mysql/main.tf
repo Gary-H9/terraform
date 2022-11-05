@@ -2,6 +2,15 @@ provider "aws" {
   region = "us-east-2"
 }
 
+  backend "s3" {
+    bucket         = "gary-up-and-running-state"
+    key            = "stage/data-stores/mysql/terraform.tfstate"
+    region         = "us-east-2"
+
+    dynamodb_table = "terraform-up-and-running-locks"
+    encrypt        = true
+  }
+
 resource "aws_db_instance" "example" {
   identifier_prefix   = "terraform-up-and-running"
   engine              = "mysql"
