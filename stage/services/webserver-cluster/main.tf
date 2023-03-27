@@ -1,16 +1,6 @@
 terraform {
   required_version = ">= 1.0.0, < 2.0.0"
 
-  backend "s3" {
-    # Replace this with your bucket name!
-    bucket         = "gary-up-and-running-state"
-    key            = "stage/services/webserver-cluster/terraform.tfstate"
-    region         = "us-east-2"
-
-    # Replace this with your DynamoDB table name!
-    dynamodb_table = "terraform-up-and-running-locks-2"
-    encrypt        = true
-  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -18,7 +8,6 @@ terraform {
     }
   }
 }
-
 provider "aws" {
   region = "us-east-2"
 }
@@ -146,6 +135,16 @@ resource "aws_lb_listener_rule" "asg" {
   }
 }
 
+data "terraform_remote_state" "db" {
+  backend = "s3"
+
+  config = {
+    bucket = var.db_remote_state_bucket
+    key    = var.db_remote_state_key
+    region = "us-east-2"
+  }
+}
+
 data "aws_vpc" "default" {
   default = true
 }
@@ -156,13 +155,3 @@ data "aws_subnets" "default" {
     values = [data.aws_vpc.default.id]
   }
 }
-
-# data "terraform_remote_state" "db" {
-#   backend = "s3"
-
-#   config = {
-#     bucket = var.db_remote_state_bucket
-#     key    = var.db_remote_state_key
-#     region = "us-east-2"
-#   }
-# }
