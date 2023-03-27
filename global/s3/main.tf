@@ -8,7 +8,7 @@ terraform {
     region         = "us-east-2"
 
     # Replace this with your DynamoDB table name!
-    dynamodb_table = "terraform-up-and-running-locks"
+    dynamodb_table = "terraform-up-and-running-locks-2"
     encrypt        = true
   }
   required_providers {
