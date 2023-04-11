@@ -9,14 +9,6 @@ terraform {
   }
 }
 
-locals {
-  http_port    = 80
-  any_port     = 0
-  any_protocol = "-1"
-  tcp_protocol = "tcp"
-  all_ips      = ["0.0.0.0/0"]
-}
-
 resource "aws_launch_configuration" "example" {
   image_id               = "ami-0fb653ca2d3203ac1"
   instance_type          = var.instance_type
@@ -142,6 +134,14 @@ resource "aws_lb_listener_rule" "asg" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.asg.arn
   }
+}
+
+locals {
+  http_port    = 80
+  any_port     = 0
+  any_protocol = "-1"
+  tcp_protocol = "tcp"
+  all_ips      = ["0.0.0.0/0"]
 }
 
 data "terraform_remote_state" "db" {
