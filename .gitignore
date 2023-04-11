@@ -7,3 +7,5 @@ stage/data-stores/mysql/.terraform*
 global/.terraform*
 global/s3/terraform.tfvars
 stage/data-stores/mysql/.terraform*
+modules/services/webserver-cluster/.terraform*
+prod/services/webserver-cluster/.terraform*
