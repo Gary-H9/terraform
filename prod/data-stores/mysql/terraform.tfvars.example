@@ -1,4 +1,2 @@
 db_username = "Check Parameter Store"
 db_password = "Check Parameter Store"
-db_remote_state_bucket = "Check Parameter Store / Think"
-db_remote_state_key    = "Check Parameter Store / Think"
