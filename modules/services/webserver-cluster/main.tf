@@ -10,7 +10,7 @@ terraform {
 }
 
 resource "aws_launch_configuration" "example" {
-  image_id               = "ami-0fb653ca2d3203ac1"
+  image_id               = var.ami
   instance_type          = var.instance_type
   security_groups = [aws_security_group.instance.id]
 
@@ -19,6 +19,7 @@ resource "aws_launch_configuration" "example" {
     server_port = var.server_port
     db_address  = data.terraform_remote_state.db.outputs.address
     db_port     = data.terraform_remote_state.db.outputs.port
+    server_text = var.server_text
   })
 
   # Required when using a launch configuration with an auto scaling group.
@@ -39,15 +40,22 @@ resource "aws_security_group" "instance" {
 }
 
 resource "aws_autoscaling_group" "example" {
+  name = var.cluster_name
   launch_configuration = aws_launch_configuration.example.name
   vpc_zone_identifier  = data.aws_subnets.default.ids
-
   target_group_arns = [aws_lb_target_group.asg.arn]
   health_check_type = "ELB"
 
   min_size = var.min_size
   max_size = var.max_size
 
+  # Use instance refresh to rollout all changes to the ASG
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+  }  
   tag {
     key                 = "Name"
     value               = var.cluster_name
@@ -86,8 +94,6 @@ resource "aws_autoscaling_schedule" "scale_in_at_night" {
   recurrence             = "0 17 * * *"
   autoscaling_group_name = aws_autoscaling_group.example.name
 }
-
-
 
 resource "aws_lb" "example" {
   name               = "${var.cluster_name}-example"
