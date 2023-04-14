@@ -16,3 +16,13 @@ prod/data-stores/mysql/terraform.tfvars
 global/.terraform*
 global/s3/terraform.tfvars
 global/s3/.terraform*
+
+global/iam/existing-iam-user/.terraform*
+global/iam/one-iam-user/.terraform*
+global/iam/three-iam-users-for-each/.terraform*
+global/iam/three-iam-users-module-count/.terraform*
+global/iam/three-iam-users-unique-names/.terraform*
+global/iam/for-expressions/.terraform*
+global/iam/string-directives/.terraform*
+global/iam/three-iam-users-increment-name/.terraform*
+global/iam/three-iam-users-module-for-each/.terraform*
