@@ -10,8 +10,8 @@ terraform {
 }
 
 resource "aws_launch_configuration" "example" {
-  image_id               = "ami-0fb653ca2d3203ac1"
-  instance_type          = var.instance_type
+  image_id        = "ami-0fb653ca2d3203ac1"
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instance.id]
 
   # Render the User Data script as a template
@@ -53,6 +53,16 @@ resource "aws_autoscaling_group" "example" {
     value               = var.cluster_name
     propagate_at_launch = true
   }
+
+  dynamic "tag" {
+    for_each = var.custom_tags
+
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
+  }
 }
 
 resource "aws_lb" "example" {
@@ -82,7 +92,7 @@ resource "aws_lb_listener" "http" {
 resource "aws_security_group" "alb" {
   name = "${var.cluster_name}-alb"
 }
-  # Allow inbound HTTP requests
+# Allow inbound HTTP requests
 resource "aws_security_group_rule" "allow_http_inbound" {
   type              = "ingress"
   security_group_id = aws_security_group.alb.id
