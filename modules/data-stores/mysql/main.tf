@@ -7,14 +7,6 @@ terraform {
       version = "~> 4.0"
     }
   }
-
-  # backend "s3" {
-  #   bucket         = "gary-up-and-running-state"
-  #   key            = "stage/data-stores/mysql/terraform.tfstate"
-  #   region         = "us-east-2"
-  #   dynamodb_table = "terraform-up-and-running-locks-2"
-  #   encrypt        = true
-  # }
 }
 
 resource "aws_db_instance" "example" {
