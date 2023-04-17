@@ -44,10 +44,6 @@ module "webserver_cluster" {
     Owner = "value"
     ManagedBy = "terraform"
   }
-
-  instance_type = "m4.large"
-  min_size      = 2
-  max_size      = 10
 }
 
 resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
