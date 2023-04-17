@@ -13,22 +13,21 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "gary-up-and-running-state"
-    key            = "stage/data-stores/mysql/terraform.tfstate"
-    region         = "us-east-2"
-    dynamodb_table = "terraform-up-and-running-locks-2"
-    encrypt        = true
+    # This backend configuration is filled in automatically at test time by Terratest. If you wish to run this example
+    # manually, uncomment and fill in the config below.
+
+    # bucket         = "<YOUR S3 BUCKET>"
+    # key            = "<SOME PATH>/terraform.tfstate"
+    # region         = "us-east-2"
+    # dynamodb_table = "<YOUR DYNAMODB TABLE>"
+    # encrypt        = true
   }
 }
 
-resource "aws_db_instance" "example" {
-  identifier_prefix   = "terraform-up-and-running"
-  engine              = "mysql"
-  allocated_storage   = 10
-  instance_class      = "db.t2.micro"
-  skip_final_snapshot = true
-  db_name             = "example_database"
+module "mysql" {
+  source = "../../../../modules/data-stores/mysql"
 
-  username = var.db_username
-  password = var.db_password
+  db_name     = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
 }
