@@ -40,6 +40,7 @@ resource "aws_security_group" "instance" {
 }
 
 resource "aws_autoscaling_group" "example" {
+
   name = var.cluster_name
   launch_configuration = aws_launch_configuration.example.name
   vpc_zone_identifier  = data.aws_subnets.default.ids
@@ -56,11 +57,13 @@ resource "aws_autoscaling_group" "example" {
       min_healthy_percentage = 50
     }
   }  
+
   tag {
     key                 = "Name"
     value               = var.cluster_name
     propagate_at_launch = true
   }
+
 
   dynamic "tag" {
     for_each = var.custom_tags
